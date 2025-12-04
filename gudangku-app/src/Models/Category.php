@@ -29,21 +29,24 @@ class Category {
 
     // Method untuk menambahkan kategori baru
     public static function create(string $name): bool {
+        // Query untuk memasukkan kategori baru ke database
         $stmt = Database::conn()->prepare("INSERT INTO category(name_category) VALUES(?)");
-        return $stmt->execute([$name]);
+        return $stmt->execute([$name]);  // Mengembalikan true jika berhasil
     }
+
 
     // Method untuk mengupdate kategori
     public static function update(int $id, string $name): bool {
-    // Query untuk mengupdate kategori berdasarkan ID
-    $stmt = Database::conn()->prepare("UPDATE category SET name_category = ? WHERE id = ?");
-    return $stmt->execute([$name, $id]);  // Eksekusi query untuk mengupdate data
-}
+        // Query untuk mengupdate kategori berdasarkan ID
+        $stmt = Database::conn()->prepare("UPDATE category SET name_category = ? WHERE id = ?");
+        return $stmt->execute([$name, $id]);  // Eksekusi query untuk mengupdate data
+    }
 
     // Method untuk memeriksa apakah kategori sudah ada berdasarkan nama
     public static function existsByName(string $name): bool {
         $stmt = Database::conn()->prepare("SELECT COUNT(*) FROM category WHERE name_category = ?");
         $stmt->execute([$name]);
-        return $stmt->fetchColumn() > 0;
+        return $stmt->fetchColumn() > 0;  // Mengembalikan true jika kategori sudah ada
     }
+
 }

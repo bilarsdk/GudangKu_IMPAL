@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/assets/category.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 </head>
 <body>
     <header>
@@ -30,12 +29,10 @@
                     </button>
                 </a>
 
-                <!-- Tombol Add Category dengan ikon -->
-                <a href="/?r=catCreate" target="_blank">
-                    <button class="btn add-category" onclick="openAddModal()">
-                        <i class="fas fa-plus"></i> Add Category
-                    </button> 
-                </a>
+                <!-- Tombol Add Category dengan ikon - FIXED: Hapus tag <a> -->
+                <button class="btn add-category" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Add Category
+                </button>
             </div>
 
             <!-- Search Form Styling -->
@@ -44,8 +41,6 @@
                 <button type="submit" class="search-btn"><i class="fas fa-search"></i> Search</button>
             </form>
 
-
-
             <!-- Modal Edit Category -->
             <div id="editCategoryModal" class="modal">
                 <div class="modal-content">
@@ -53,28 +48,27 @@
                     <h3>Edit Category</h3>
                     <form id="editCategoryForm" method="post" action="/?r=catUpdate">
                         <input type="hidden" name="id" id="categoryId">
-                        <label for="name">Name Category</label>
-                        <input type="text" name="name" id="categoryName" required placeholder="Enter new category name">
+                        <label for="editCategoryName">Name Category</label>
+                        <input type="text" name="name" id="editCategoryName" required placeholder="Enter new category name">
                         <button type="submit" class="update-btn">Update</button>
                         <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Modal Add Category -->
+            <!-- Modal Add Category - FIXED: Action mengarah ke /?r=catCreate -->
             <div id="addCategoryModal" class="modal">
                 <div class="modal-content">
                     <span class="close-btn" onclick="closeAddModal()">&times;</span>
                     <h3>Add New Category</h3>
-                    <form id="addCategoryForm" method="post" action="/?r=category">
-                        <label for="name">Category Name</label>
-                        <input type="text" name="name" id="categoryName" required placeholder="Enter new category name">
+                    <form id="addCategoryForm" method="post" action="/?r=catCreate">
+                        <label for="addCategoryName">Category Name</label>
+                        <input type="text" name="name" id="addCategoryName" required placeholder="Enter new category name">
                         <button type="submit" class="add-btn">Add Category</button>
                         <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
                     </form>
                 </div>
             </div>
-
 
             <!-- Category List -->
             <ul class="category-list">
@@ -82,28 +76,35 @@
                     <li class="category-item">
                         <span class="category-name"><?php echo htmlspecialchars($category['name_category']); ?></span>
                         <a href="javascript:void(0);" class="edit-category" onclick="openModal(<?php echo $category['id']; ?>, '<?php echo htmlspecialchars($category['name_category']); ?>')">
-                            <i class="fas fa-pencil-alt"></i> <!-- Ikon Pensil -->
+                            <i class="fas fa-pencil-alt"></i>
                         </a>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
     </main>
+
+    <!-- Error Notification -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="error-notification">
+            <?php echo $_SESSION['error']; ?>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
     <script>
-        // Fungsi untuk membuka modal dan mengisi input dengan data kategori yang dipilih
+        // Fungsi untuk membuka modal Edit dan mengisi input dengan data kategori yang dipilih
         function openModal(id, name) {
             document.getElementById('editCategoryModal').style.display = 'block';
-            document.getElementById('categoryId').value = id;  // Set ID kategori ke input hidden
-            document.getElementById('categoryName').value = name;  // Set nama kategori ke input
+            document.getElementById('categoryId').value = id;
+            document.getElementById('editCategoryName').value = name;
         }
 
-        // Fungsi untuk menutup modal
+        // Fungsi untuk menutup modal Edit
         function closeModal() {
             document.getElementById('editCategoryModal').style.display = 'none';
         }
-    </script>
 
-    <script>
         // Fungsi untuk membuka modal Add Category
         function openAddModal() {
             document.getElementById('addCategoryModal').style.display = 'block';
@@ -113,14 +114,26 @@
         function closeAddModal() {
             document.getElementById('addCategoryModal').style.display = 'none';
         }
-    </script>
 
-    <script>
+        // Menutup modal ketika klik di luar modal
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editCategoryModal');
+            const addModal = document.getElementById('addCategoryModal');
+            
+            if (event.target === editModal) {
+                closeModal();
+            }
+            if (event.target === addModal) {
+                closeAddModal();
+            }
+        }
+
+        // Error notification handler
         $(document).ready(function() {
-            <?php if (isset($error_message)): ?>
-                $('#error-notification').addClass('show');
+            <?php if (isset($_SESSION['error'])): ?>
+                $('.error-notification').addClass('show');
                 setTimeout(function() {
-                    $('#error-notification').removeClass('show');
+                    $('.error-notification').removeClass('show');
                 }, 3000);
             <?php endif; ?>
         });
