@@ -48,24 +48,32 @@
                     <h3>Edit Category</h3>
                     <form id="editCategoryForm" method="post" action="/?r=catUpdate">
                         <input type="hidden" name="id" id="categoryId">
-                        <label for="editCategoryName">Name Category</label>
-                        <input type="text" name="name" id="editCategoryName" required placeholder="Enter new category name">
-                        <button type="submit" class="update-btn">Update</button>
-                        <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                        <div class="form-group">
+                            <label for="editCategoryName">Name Category</label>
+                            <input type="text" name="name" id="editCategoryName" required placeholder="Enter category name">
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="update-btn">Update</button>
+                        </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Modal Add Category - FIXED: Action mengarah ke /?r=catCreate -->
+            <!-- Modal Add Category -->
             <div id="addCategoryModal" class="modal">
                 <div class="modal-content">
                     <span class="close-btn" onclick="closeAddModal()">&times;</span>
                     <h3>Add New Category</h3>
                     <form id="addCategoryForm" method="post" action="/?r=catCreate">
-                        <label for="addCategoryName">Category Name</label>
-                        <input type="text" name="name" id="addCategoryName" required placeholder="Enter new category name">
-                        <button type="submit" class="add-btn">Add Category</button>
-                        <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
+                        <div class="form-group">
+                            <label for="addCategoryName">Category Name</label>
+                            <input type="text" name="name" id="addCategoryName" required placeholder="Enter new category name">
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
+                            <button type="submit" class="add-btn">Add Category</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -84,13 +92,6 @@
         </div>
     </main>
 
-    <!-- Error Notification -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="error-notification">
-            <?php echo $_SESSION['error']; ?>
-        </div>
-        <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
 
     <script>
         // Fungsi untuk membuka modal Edit dan mengisi input dengan data kategori yang dipilih
@@ -127,16 +128,6 @@
                 closeAddModal();
             }
         }
-
-        // Error notification handler
-        $(document).ready(function() {
-            <?php if (isset($_SESSION['error'])): ?>
-                $('.error-notification').addClass('show');
-                setTimeout(function() {
-                    $('.error-notification').removeClass('show');
-                }, 3000);
-            <?php endif; ?>
-        });
     </script>
 </body>
 </html>

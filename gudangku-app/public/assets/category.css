@@ -174,186 +174,222 @@ h2 {
     margin-right: 5px;
 }
 
-/* Modal Styling untuk Add Category */
+/* Modal Styling - Modern Centered Design */
 .modal {
-    display: none; /* Modal disembunyikan secara default */
+    display: none; /* Default: hidden */
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);  /* Latar belakang gelap */
-    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Modal hanya muncul saat ada class 'show' atau inline style display: block */
+.modal.show {
+    display: flex !important;
     align-items: center;
-    z-index: 1000;  /* Modal muncul di atas elemen lain */
+    justify-content: center;
+}
+
+.modal[style*="display: block"] {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Tombol untuk menutup modal */
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Header */
+.modal-content h3 {
+    margin: 0;
+    padding: 24px 24px 20px 24px;
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Close Button - Modern X */
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    right: 20px;
+    top: 20px;
+    color: #666;
     font-size: 24px;
+    font-weight: 300;
     cursor: pointer;
-}
-
-/* Styling untuk form di modal */
-.modal form {
+    transition: all 0.2s;
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
 }
 
-.modal form label {
-    font-size: 16px;
-    font-weight: bold;
+.close-btn:hover {
+    background-color: #f5f5f5;
     color: #333;
 }
 
-.modal form input[type="text"] {
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+/* Form Styling */
+.modal-content form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.modal form button {
+.modal-content label {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.modal-content input[type="text"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.modal-content input[type="text"]::placeholder {
+    color: #9ca3af;
+}
+
+/* Button Container - Flex Row untuk kanan-kiri */
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Button Styling - Modern Design */
+.update-btn,
+.cancel-btn,
+.add-btn {
+    flex: 1;
     padding: 12px 20px;
-    font-size: 16px;
-    background-color: #1a73e8;
-    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
-.modal form button:hover {
-    background-color: #1668b3;
-}
-
-/* Button Cancel untuk menutup modal */
 .cancel-btn {
-    background-color: #f44336;  /* Merah */
+    background-color: transparent;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    order: 1; /* Cancel di kiri */
 }
 
 .cancel-btn:hover {
-    background-color: #d32f2f;  /* Merah lebih gelap */
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
 }
 
-/* Notifikasi Error */
-.error-notification {
-    display: none;
-    background-color: #f44336;
+.update-btn,
+.add-btn {
+    background-color: #2563eb;
     color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-top: 20px;
+    order: 2; /* Update/Add di kanan */
 }
 
-.error-notification.show {
-    display: block;
-    transition: opacity 0.3s ease;
+.update-btn:hover,
+.add-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
-/* Modal Styling untuk Update Category */
-#editCategoryModal {
-    display: none; /* Modal disembunyikan secara default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);  /* Latar belakang gelap */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;  /* Modal muncul di atas elemen lain */
+.update-btn:active,
+.add-btn:active {
+    transform: translateY(0);
 }
 
-#editCategoryModal .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Tombol untuk menutup modal */
-#editCategoryModal .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* Styling untuk form di modal update kategori */
-#editCategoryModal form {
+/* Form Group Styling */
+.form-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
 }
 
-#editCategoryModal form label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;  /* Ubah menjadi 90% untuk memastikan modal tidak melebihi layar */
+        max-width: 500px;  /* Atur max-width agar tidak lebih besar dari 500px */
+    }
+
+    .modal-content h3 {
+        font-size: 20px;  /* Menyesuaikan ukuran font di dalam modal */
+        padding: 24px 24px 16px 24px;
+    }
+
+    .modal-content form {
+        padding: 24px;
+    }
+
+    /* Agar tombol tetap responsif */
+    .modal-content form button {
+        font-size: 16px;  /* Menyesuaikan ukuran tombol */
+    }
 }
 
-#editCategoryModal form input[type="text"] {
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+
+/* Animation for better UX */
+@media (prefers-reduced-motion: reduce) {
+    .modal,
+    .modal-content {
+        animation: none;
+    }
 }
 
-#editCategoryModal form button {
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#editCategoryModal form button:hover {
-    background-color: #1668b3;
-}
-
-/* Button Cancel untuk menutup modal */
-#editCategoryModal .cancel-btn {
-    background-color: #f44336;  /* Merah */
-}
-
-#editCategoryModal .cancel-btn:hover {
-    background-color: #d32f2f;  /* Merah lebih gelap */
-}
-
-/* Notifikasi Error pada modal update */
-#editCategoryModal .error-notification {
-    display: none;
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-#editCategoryModal .error-notification.show {
-    display: block;
-    transition: opacity 0.3s ease;
-}

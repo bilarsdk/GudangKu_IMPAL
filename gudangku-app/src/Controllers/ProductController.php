@@ -6,15 +6,35 @@ use App\Models\Category;
 class ProductController {
 
     // Menampilkan daftar produk
-    public static function index() {
-        $q = $_GET['q'] ?? null; // Mencari produk berdasarkan nama
-        $sort = isset($_GET['sort']); // Mengurutkan produk berdasarkan abjad
+     public static function index() {
+        // Pastikan session dimulai
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // Ambil category_id dari URL jika ada
+        $categoryId = $_GET['category_id'] ?? null;
+        $searchQuery = $_GET['q'] ?? '';
 
-        // Mengambil produk berdasarkan pencarian dan urutan
-        $products = Product::all($q, $sort);
-        $categories = Category::all(); // Mengambil semua kategori untuk dropdown
+        // Jika ada category_id, filter product berdasarkan kategori
+        if ($categoryId) {
+            $products = Product::getByCategoryId((int)$categoryId);
+            // Ambil nama kategori untuk ditampilkan di header
+            $category = Category::findById((int)$categoryId);
+            $categoryName = $category ? $category['name_category'] : 'Unknown Category';
+        } else {
+            // Jika tidak ada category_id, tampilkan semua product atau hasil search
+            $products = $searchQuery ? Product::search($searchQuery) : Product::all();
+            $categoryName = null;
+        }
+
+        // Ambil semua kategori untuk dropdown/filter
+        $categories = Category::all();
+
+        // Menampilkan halaman product
         require __DIR__.'/../Views/product/index.php';
     }
+
 
     // Menampilkan form untuk menambah atau mengedit produk
     public static function form() {
